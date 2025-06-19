@@ -12,13 +12,19 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # 推荐更新到 v4，虽然 v3 也行
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - name: Setup Node # 推荐更新到 v4，并启用 pnpm 缓存
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20" # 建议明确指定 Node.js 版本，如 '18' 或 '20'
+          cache: "pnpm" # 启用 pnpm 缓存，会根据 pnpm-lock.yaml 自动处理
 
-      - name: Install pnpm
-        run: npm install -g pnpm
+      - name: Setup pnpm # <--- 这里是关键修改！替换原来的 'npm install -g pnpm'
+        uses: pnpm/action-setup@v3 # 使用 pnpm 官方 action
+        with:
+          version: 8 # **设置为你本地的 pnpm 主版本号**
+          run_install: false # 不在此步骤自动运行 install
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -33,13 +39,19 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # 推荐更新到 v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - name: Setup Node # 推荐更新到 v4，并启用 pnpm 缓存
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20" # 建议明确指定 Node.js 版本
+          cache: "pnpm"
 
-      - name: Install pnpm
-        run: npm install -g pnpm
+      - name: Setup pnpm # <--- 这里是关键修改！替换原来的 'npm install -g pnpm'
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8 # **设置为你本地的 pnpm 主版本号**
+          run_install: false
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
